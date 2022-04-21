@@ -1,0 +1,39 @@
+{
+  "extends": "@foxglove/fox/tsconfig/tsconfig.json",
+
+  // "include": ["./src/**/*"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Additional TypeScript error reporting checks are enabled by default to improve code quality.
+    // Enable/disable these checks as necessary to suit your coding preferences or work with
+    // existing code
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "baseUrl": "./",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "paths": {
+        "App": ["src/App"],
+        "components/*": ["src/components/*"],
+        "shared/*": ["src/shared/*"],
+        "services/*": ["src/services/*"]
+    },
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "target": "ESNext"
+  }
+}
