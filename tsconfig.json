@@ -1,5 +1,5 @@
 {
-  "extends": "@foxglove/fox/tsconfig/tsconfig.json",
+  // "extends": "@foxglove/fox/tsconfig/tsconfig.json",
 
   // "include": ["./src/**/*"],
   "compilerOptions": {
