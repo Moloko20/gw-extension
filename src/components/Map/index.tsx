@@ -1,15 +1,26 @@
 import React from 'react'
-import { MapContainer, TileLayer } from 'react-leaflet'
 
-export function Map() {
-    require('./index.sass')
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 
+export function Map(): JSX.Element {
     return (
-        <MapContainer className="map" center={[40.505, -100.09]} zoom={13}>
+        <MapContainer
+            center={[31.505, -0.09]}
+            zoom={10}
+            scrollWheelZoom={false}
+            zoomControl={true}
+            style={{ width: '100%', height: '500px' }}
+        >
             <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <Marker position={[31.505, -0.09]}>
+                <Popup>
+                    A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>
+            </Marker>
         </MapContainer>
     )
 }
