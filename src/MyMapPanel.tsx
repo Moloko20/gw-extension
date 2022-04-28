@@ -5,11 +5,12 @@ import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglo
 
 import { Map } from './components/Map'
 
-import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import LeafletRetinaIconUrl from 'leaflet/dist/images/marker-icon-2x.png'
 import LeafletIconUrl from 'leaflet/dist/images/marker-icon.png'
 import LeafletShadowIconUrl from 'leaflet/dist/images/marker-shadow.png'
+
+import 'leaflet/dist/leaflet.css'
 
 L.Marker.prototype.options.icon = L.icon({
     iconUrl: LeafletIconUrl,
@@ -86,9 +87,9 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
     return (
         <>
             <h1>Hi, my name is Alex!</h1>
-
+            before map
             <Map />
-
+            after map
             <div>{topics?.join(',')}</div>
             <div>{messages?.length}</div>
         </>
