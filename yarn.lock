@@ -1258,10 +1258,10 @@
   "resolved" "https://registry.npmjs.org/@foxglove/eslint-plugin/-/eslint-plugin-0.19.0.tgz"
   "version" "0.19.0"
 
-"@foxglove/fox@^0.3.0":
-  "integrity" "sha512-9hdfjYcxUrecCSx5NB9+Rr6eXpECJkDhebjIAd7ySnWOO+RXJj0wEIG+eOu7jlRvVzA9fygIFk607BXYDZ5cPw=="
-  "resolved" "https://registry.npmjs.org/@foxglove/fox/-/fox-0.3.0.tgz"
-  "version" "0.3.0"
+"@foxglove/fox@^0.4.0":
+  "integrity" "sha512-zivZvbTDe/82gMHqg8nehpgwlLz3+f3Ma0dbqACAPnRIQWLWczR+H1WXFJGzrT0MrV9NpMqYo/u80gOyvyX89Q=="
+  "resolved" "https://registry.npmjs.org/@foxglove/fox/-/fox-0.4.0.tgz"
+  "version" "0.4.0"
   dependencies:
     "clean-webpack-plugin" "4.0.0-alpha.0"
     "commander" "7.2.0"
