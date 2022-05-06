@@ -3,5 +3,5 @@ import { ExtensionContext } from '@foxglove/studio'
 import { initMyMapExtension } from './MyMapPanel'
 
 export function activate(extensionContext: ExtensionContext): void {
-    extensionContext.registerPanel({ name: 'gw-extension', initPanel: initMyMapExtension })
+    extensionContext.registerPanel({ name: 'GW-extension', initPanel: initMyMapExtension })
 }
