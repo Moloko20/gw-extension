@@ -11,14 +11,26 @@ module.exports = {
         '@storybook/addon-interactions',
     ],
     framework: '@storybook/react',
-    // typescript: {
-    //     reactDocgen: 'react-docgen-typescript',
-    //     reactDocgenTypescriptOptions: {
-    //         extends: '../tsconfig.json',
-    //     },
-    // },
     webpackFinal: async config => {
         config.resolve.plugins = [...(config.resolve.plugins || []), new TsconfigPathsPlugin()]
+
+        config.module.rules.push({
+            test: /\.s[ac]ss$/i,
+            use: [
+                // Creates `style` nodes from JS strings
+                'style-loader',
+                // Translates CSS into CommonJS
+                'css-loader',
+                // Compiles Sass to CSS
+                {
+                    loader: 'sass-loader',
+                    // options: {
+                    //     sourceMap: true,
+                    //     additionalData: '@import "./src/Shared/Styles/variables.sass"',
+                    // },
+                },
+            ],
+        })
 
         return config
     },
