@@ -7,7 +7,7 @@ import { Layers } from '../Layers'
 import './index.css'
 
 export function Map(): JSX.Element {
-    console.log(Marker, Popup)
+    console.log('none', Marker, Popup)
 
     return (
         <MapContainer
