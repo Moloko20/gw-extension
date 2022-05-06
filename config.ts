@@ -8,8 +8,6 @@ module.exports = {
         //     use: ['style-loader', 'css-loader'],
         // })
 
-        //  L from 'leaflet'
-
         config.module.rules.push({
             test: /\.(jpe?g|png|gif|svg)$/i,
             use: [
