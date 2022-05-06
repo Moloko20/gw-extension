@@ -5,27 +5,29 @@ import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglo
 
 import { Map } from './components/Map'
 
-import L from 'leaflet'
-import LeafletRetinaIconUrl from 'leaflet/dist/images/marker-icon-2x.png'
-import LeafletIconUrl from 'leaflet/dist/images/marker-icon.png'
-import LeafletShadowIconUrl from 'leaflet/dist/images/marker-shadow.png'
+// import L from 'leaflet'
+// import LeafletRetinaIconUrl from 'leaflet/dist/images/marker-icon-2x.png'
+// import LeafletIconUrl from 'leaflet/dist/images/marker-icon.png'
+// import LeafletShadowIconUrl from 'leaflet/dist/images/marker-shadow.png'
 
-import 'leaflet/dist/leaflet.css'
+// import 'leaflet/dist/leaflet.css'
 
-L.Marker.prototype.options.icon = L.icon({
-    iconUrl: LeafletIconUrl,
-    iconRetinaUrl: LeafletRetinaIconUrl,
-    shadowUrl: LeafletShadowIconUrl,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    tooltipAnchor: [16, -28],
-    shadowSize: [41, 41],
-})
+// L.Marker.prototype.options.icon = L.icon({
+//     iconUrl: LeafletIconUrl,
+//     iconRetinaUrl: LeafletRetinaIconUrl,
+//     shadowUrl: LeafletShadowIconUrl,
+//     iconSize: [25, 41],
+//     iconAnchor: [12, 41],
+//     popupAnchor: [1, -34],
+//     tooltipAnchor: [16, -28],
+//     shadowSize: [41, 41],
+// })
+
+// console.log(L.Marker.prototype)
 
 //const destDir = path_1.join("/mnt/c/Users/Alex/.foxglove-studio/extensions", dirName);
 
-// import './index.sass'
+import './index.sass'
 
 export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX.Element {
     const [topics, setTopics] = React.useState<readonly Topic[] | undefined>()
