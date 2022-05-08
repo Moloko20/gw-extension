@@ -77,6 +77,9 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
         // subscribe to some topics, you could do this within other effects, based on input fields, etc
         // Once you subscribe to topics, currentFrame will contain message events from those topics (assuming there are messages).
         context.subscribe(['/some/topic'])
+
+        console.table(topics)
+        console.table(messages)
     }, [])
 
     // require('./index.sass')
@@ -91,9 +94,19 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
             <h1>Hi, my name is Alex!</h1>
             before map
             <Map />
-            after map
-            <div>{topics?.join(',')}</div>
-            <div>{messages?.length}</div>
+            after map{}
+            TOPICS
+            <ol>
+                {topics?.map(item => {
+                    return <li key={item.name}>ITEM{JSON.stringify(item)}</li>
+                })}
+            </ol>
+            MESSAGES
+            <ol>
+                {messages?.map(message => {
+                    return <li key={message.topic}>{JSON.stringify(message)}</li>
+                })}
+            </ol>
         </>
     )
 }
