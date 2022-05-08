@@ -2,7 +2,7 @@ import React from 'react'
 
 import { MapContainer, Marker, Popup, CircleMarker } from 'react-leaflet'
 
-import { Layers } from '../Layers'
+import { Layers } from 'components/Layers'
 
 import './index.css'
 
@@ -13,7 +13,7 @@ export function Map(): JSX.Element {
         <MapContainer
             center={[55.7522, 37.6156]}
             zoom={5}
-            scrollWheelZoom={false}
+            scrollWheelZoom={true}
             zoomControl={true}
         >
             <Layers />
