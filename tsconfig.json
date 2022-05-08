@@ -2,9 +2,8 @@
     "extends": "@foxglove/fox/tsconfig/tsconfig.json",
 
     "compilerOptions": {
-        // "rootDir": "./src",
         "outDir": "./dist",
-        "lib": ["DOM"],
+        "lib": ["DOM", "ESNext"],
 
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
@@ -21,7 +20,6 @@
         "baseUrl": "./",
         "module": "ESNext",
         "moduleResolution": "node",
-        //unfortunately paths don`t work in "fox build"
         "paths": {
             "App": ["src/App"],
             "components/*": ["src/components/*"],
