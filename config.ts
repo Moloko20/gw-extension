@@ -8,6 +8,8 @@ module.exports = {
         //     use: ['style-loader', 'css-loader'],
         // })
 
+        const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+
         config.module.rules.push({
             test: /\.(jpe?g|png|gif|svg)$/i,
             use: [
@@ -37,8 +39,12 @@ module.exports = {
                 },
             ],
         })
-
-        console.log(config.module)
+        ;(config.resolve = {
+            ...config.resolve,
+            plugins: [new TsConfigPathsPlugin()],
+        }),
+            console.log('MODULES', config.module)
+        console.log('RESOLVE', config.resolve)
 
         return config
     },
