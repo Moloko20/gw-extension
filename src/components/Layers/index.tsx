@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { TileLayer, LayersControl, useMap } from 'react-leaflet'
+import { TileLayer, LayersControl } from 'react-leaflet'
 
 import './index.css'
 
 export function Layers(): JSX.Element {
-    const map = useMap()
-    map.scrollWheelZoom.enable()
+    // const map = useMap()
+    // map.scrollWheelZoom.enable()
 
     return (
         <LayersControl position="topright">

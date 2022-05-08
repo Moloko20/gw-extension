@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglove/studio'
 
-import { Map } from './components/Map'
+import { Map } from 'components/Map'
 
 // import L from 'leaflet'
 // import LeafletRetinaIconUrl from 'leaflet/dist/images/marker-icon-2x.png'
