@@ -10,7 +10,7 @@ import { MapPanelMessage } from 'types/MapPanelMessage'
 import './index.css'
 
 type MapProps = {
-    messages: MapPanelMessage[]
+    messages?: MapPanelMessage[]
 }
 
 export function Map({ messages }: MapProps): JSX.Element {
