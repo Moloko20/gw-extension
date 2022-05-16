@@ -18,18 +18,18 @@
   
     "plugins": [
         "react",
-        "prettier",
-        "jest"
+        "import",
+        "prettier"
     ],
 
     "ignorePatterns": "dist",
 
     "overrides": [
         {
-            "files": ["*.ts", "*.tsx", "*.png"],
+            "files": ["*.ts", "*.tsx"],
             "extends": ["plugin:@foxglove/typescript"],
             "parserOptions": {
-                "project": "tsconfig.json"
+                "project": "./tsconfig.json"
             },
             "rules": {
                 "prettier/prettier": "error",
@@ -40,12 +40,17 @@
                       "groups": ["builtin", "external", "internal"],
                       "pathGroups": [
                         {
-                          "pattern": "react",
+                          "pattern": "react*",
                           "group": "external",
                           "position": "before"
+                        },
+                        {
+                            "pattern": "@foxglove*",
+                            "group": "external",
+                            "position": "before"
                         }
                       ],
-                      "pathGroupsExcludedImportTypes": ["react"],
+                      "pathGroupsExcludedImportTypes": ["react*", "@foxglove*"],
                       "newlines-between": "always",
                       "alphabetize": {
                         "order": "asc",
