@@ -3,7 +3,7 @@
 
     "compilerOptions": {
         "outDir": "./dist",
-        "lib": ["DOM", "ESNext"],
+        "lib": ["DOM", "DOM.Iterable", "ESNext", "ScriptHost"],
 
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
@@ -17,21 +17,28 @@
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
+        "noEmitOnError": true,
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+
         "baseUrl": "./",
-        "module": "ESNext",
+        "module": "CommonJS",
         "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+
         "paths": {
             "App": ["src/App"],
             "components/*": ["src/components/*"],
             "shared/*": ["src/shared/*"],
-            "services/*": ["src/services/*"]
+            "services/*": ["src/services/*"],
+            "types/*": ["src/types/*"]
         },
-        "resolveJsonModule": true,
-        "noEmitOnError": true,
-        "removeComments": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
+
         "jsx": "react",
         "target": "ESNext",
     },
+
+    "include": ["src/**/*.ts", "src/**/*.tsx", "config.ts"],
+    "exclude": ["node_modules", "dist", "src/**/*.stories.tsx", "src/components/Map/MapPanel.tsx"]
 }
