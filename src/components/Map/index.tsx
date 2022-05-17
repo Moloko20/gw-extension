@@ -1,7 +1,7 @@
 import React from 'react'
 import { MapContainer, Marker, Popup, CircleMarker } from 'react-leaflet'
 
-// import { toSec } from '@foxglove/rostime'
+import { toSec } from '@foxglove/rostime'
 
 import { Layers } from 'components/Layers'
 
@@ -14,36 +14,45 @@ type MapProps = {
     previewTime?: number
 }
 
-export function Map({ messages }: MapProps): JSX.Element {
+export function Map({ messages, previewTime }: MapProps): JSX.Element {
     console.log('none', Marker, Popup, messages)
 
-    // React.useEffect(() => {
-    //     // if (!currentMap || previewTime == undefined) {
-    //     //     return
-    //     // }
+    const [filteredMessages, setFilteredMessages] = React.useState<MapPanelMessage[]>()
 
-    //     // get the point occuring most recently before preview time but not after preview time
-    //     const prevNavMessages = messages.filter(message => toSec(message.receiveTime) < previewTime)
-    //     const event = minBy(prevNavMessages, message => previewTime - toSec(message.receiveTime))
-    //     if (!event) {
-    //         return
-    //     }
+    // const center = filteredMessages?[0].message.  ?  :[55.7522, 37.6156]
 
-    //     const topicLayer = topicLayers.get(event.topic)
+    React.useEffect(() => {
+        if (previewTime == undefined) {
+            return
+        }
 
-    //     const marker = new CircleMarker([event.message.latitude, event.message.longitude], {
-    //         radius: POINT_MARKER_RADIUS,
-    //         color: topicLayer ? darkColor(topicLayer.baseColor) : undefined,
-    //         stroke: false,
-    //         fillOpacity: 1,
-    //         interactive: false,
-    //     })
+        // get the point occuring most recently before preview time but not after preview time
+        const filteredMessagesArr = messages?.filter(
+            message => toSec(message.receiveTime) < previewTime,
+        )
 
-    //     marker.addTo(currentMap)
-    //     return () => {
-    //         marker.remove()
-    //     }
-    // }, [allNavMessages, currentMap, previewTime, topicLayers])
+        setFilteredMessages(filteredMessagesArr)
+
+        // const event = minBy(prevNavMessages, message => previewTime - toSec(message.receiveTime))
+        // if (!event) {
+        //     return
+        // }
+
+        // const topicLayer = topicLayers.get(event.topic)
+
+        // const marker = new CircleMarker([event.message.latitude, event.message.longitude], {
+        //     radius: POINT_MARKER_RADIUS,
+        //     color: topicLayer ? darkColor(topicLayer.baseColor) : undefined,
+        //     stroke: false,
+        //     fillOpacity: 1,
+        //     interactive: false,
+        // })
+
+        // marker.addTo(currentMap)
+        // return () => {
+        //     marker.remove()
+        // }
+    }, [filteredMessages, previewTime])
 
     return (
         <MapContainer
@@ -59,13 +68,13 @@ export function Map({ messages }: MapProps): JSX.Element {
                 </Popup>
             </Marker> */}
 
-            {messages?.map(item => {
+            {filteredMessages?.map(item => {
                 return (
                     <CircleMarker
                         center={[item.message.latitude, item.message.longitude]}
                         radius={2}
                     >
-                        <Popup>{item.topic}</Popup>
+                        <Popup>{item.receiveTime}</Popup>
                     </CircleMarker>
                 )
             })}
