@@ -11,6 +11,7 @@ import './index.css'
 
 type MapProps = {
     messages?: MapPanelMessage[]
+    previewTime?: number
 }
 
 export function Map({ messages }: MapProps): JSX.Element {
@@ -57,6 +58,18 @@ export function Map({ messages }: MapProps): JSX.Element {
                     A pretty CSS3 popup. <br /> Easily customizable.
                 </Popup>
             </Marker> */}
+
+            {messages?.map(item => {
+                return (
+                    <CircleMarker
+                        center={[item.message.latitude, item.message.longitude]}
+                        radius={2}
+                    >
+                        <Popup>{item.topic}</Popup>
+                    </CircleMarker>
+                )
+            })}
+
             <CircleMarker center={[55.7522, 37.6156]} radius={2}>
                 <Popup>some data</Popup>
             </CircleMarker>
