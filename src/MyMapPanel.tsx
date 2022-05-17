@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom'
 import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglove/studio'
 // import { toSec } from '@foxglove/rostime'
 
-// import { Map } from 'components/Map'
+import { Map } from 'components/Map'
+
 import { MapPanelMessage } from 'types/MapPanelMessage'
 
 // import L from 'leaflet'
@@ -142,7 +143,11 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
     return (
         <>
             <h1>Hi, my name is Alex!</h1>
-            {/* <Map messages={allMapMessages} previewTime={previewTime} /> */}
+            {allMapMessages[0]?.message.latitude && allMapMessages[0]?.message.longitude ? (
+                <Map messages={allMapMessages} previewTime={previewTime} />
+            ) : (
+                <h2>Waiting for first GPS point...</h2>
+            )}
             {/* TOPICS 
             <ol>
                 {topics?.map(item => {
