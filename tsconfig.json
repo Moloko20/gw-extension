@@ -1,6 +1,4 @@
 {
-    "extends": "@foxglove/fox/tsconfig/tsconfig.json",
-
     "compilerOptions": {
         "outDir": "./dist",
         "lib": ["DOM", "DOM.Iterable", "ESNext", "ScriptHost"],
@@ -8,7 +6,6 @@
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "noFallthroughCasesInSwitch": true,
-        "noImplicitAny": false, //temporarily disabled due to config.ts
         "noImplicitReturns": true,
         "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
@@ -32,13 +29,21 @@
             "components/*": ["src/components/*"],
             "shared/*": ["src/shared/*"],
             "services/*": ["src/services/*"],
-            "types/*": ["src/types/*"]
+            "types/*": ["src/types/*"],
+            "helpers/*": ["src/helpers/*"]
         },
+
+        "types": [
+            "node",
+            "webpack-env",
+            "react",
+            "react-dom"
+        ],
 
         "jsx": "react",
         "target": "ESNext",
     },
 
-    "include": ["src/**/*.ts", "src/**/*.tsx", "config.ts"],
-    "exclude": ["node_modules", "dist", "src/**/*.stories.tsx", "src/components/Map/MapPanel.tsx"]
+    // "include": ["src/**/*", "./config.ts"],
+    "exclude": ["node_modules", "dist", "src/components/Map/MapPanel.tsx", "src/components/**/*.stories.tsx"]
 }
