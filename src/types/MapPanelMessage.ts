@@ -1,6 +1,6 @@
 import { MessageEvent } from '@foxglove/studio'
 
-// import { FoxgloveMessages } from './FoxgloveMessages'
+import { FoxgloveMessages } from './FoxgloveMessages'
 
 export type Point = {
     lat: number
@@ -44,5 +44,5 @@ export type NavSatFixMsg = {
 }
 
 export type MapPanelMessage =
-    // | MessageEvent<FoxgloveMessages['foxglove.GeoJSON']>
-    MessageEvent<NavSatFixMsg>
+    | MessageEvent<FoxgloveMessages['foxglove.GeoJSON']>
+    | MessageEvent<NavSatFixMsg>
