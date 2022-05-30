@@ -35,29 +35,3 @@ export const BasicRender: ComponentStory<typeof MyMapPanel> = () => {
         </div>
     )
 }
-
-// function createMarker(): Marker {
-//     return {
-//         header: {
-//             stamp: { sec: 0, nsec: 0 },
-//             frame_id: 'base_link',
-//         },
-//         ns: '',
-//         id: 0,
-//         type: MarkerType.CUBE,
-//         action: MarkerAction.ADD,
-//         pose: {
-//             position: { x: 0, y: 0, z: 0 },
-//             orientation: { x: 0, y: 0, z: 0, w: 1 },
-//         },
-//         scale: { x: 1, y: 1, z: 1 },
-//         color: { r: 1, g: 1, b: 1, a: 1 },
-//         lifetime: { sec: 0, nsec: 0 },
-//         frame_locked: false,
-//         points: [],
-//         colors: [],
-//         text: '',
-//         mesh_resource: '',
-//         mesh_use_embedded_materials: false,
-//     }
-// }
