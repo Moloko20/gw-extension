@@ -1,13 +1,5 @@
 module.exports = {
-    webpack: config => {
-        // You can modify the webpack build config here. Be sure to return
-        // your modified config object.
-        //
-        // config.module.rules.push({
-        //     test: /\.css$/i,
-        //     use: ['style-loader', 'css-loader'],
-        // })
-
+    webpack(config) {
         const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
         config.module.rules.push({
@@ -39,11 +31,12 @@ module.exports = {
                 },
             ],
         })
-        ;(config.resolve = {
+        config.resolve = {
             ...config.resolve,
             plugins: [new TsConfigPathsPlugin()],
-        }),
-            console.log('MODULES', config.module)
+        }
+
+        console.log('MODULES', config.module)
         console.log('RESOLVE', config.resolve)
 
         return config
