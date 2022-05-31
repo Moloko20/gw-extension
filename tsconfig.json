@@ -45,5 +45,5 @@
     },
 
     // "include": ["src/**/*", "./config.ts"],
-    "exclude": ["node_modules", "dist", "src/components/Map/MapPanel.tsx", "src/components/**/*.stories.tsx"]
+    "exclude": ["node_modules", "dist", "testCode", "src/components/**/*.stories.tsx"]
 }
