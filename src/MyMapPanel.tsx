@@ -1,12 +1,15 @@
-import React, { StrictMode } from 'react'
+import React, { FC, StrictMode, useState, useMemo, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglove/studio'
 // import { toSec } from '@foxglove/rostime'
 
+import { partition } from 'lodash'
+
 import { Map } from 'components/Map'
 
-import { MapPanelMessage } from 'types/MapPanelMessage'
+import { MapPanelMessage, Point } from 'types/MapPanelMessage'
+import { FoxgloveMessages } from 'types/FoxgloveMessages'
 
 // import L from 'leaflet'
 // import LeafletRetinaIconUrl from 'leaflet/dist/images/marker-icon-2x.png'
@@ -28,19 +31,61 @@ import { MapPanelMessage } from 'types/MapPanelMessage'
 
 //const destDir = path_1.join("/mnt/c/Users/Alex/.foxglove-studio/extensions", dirName);
 
+const isGeoJSONMessage = (
+    message: MessageEvent<unknown>,
+): message is MessageEvent<FoxgloveMessages['foxglove.GeoJSON']> => {
+    return (
+        typeof message.message === 'object' &&
+        message.message != undefined &&
+        'geojson' in message.message
+    )
+}
+
 import './index.sass'
 
-export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX.Element {
+type MyMapPanelProps = {
+    context: PanelExtensionContext
+}
+
+export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
     const [topics, setTopics] = React.useState<readonly Topic[] | undefined>()
+
+    const [allMapMessages, setAllMapMessages] = useState<MapPanelMessage[]>([])
+    const [currentMapMessages, setCurrentMapMessages] = useState<MapPanelMessage[]>([])
+
+    const [_allGeoMessages, allNavMessages] = useMemo(
+        () => partition(allMapMessages, isGeoJSONMessage),
+        [allMapMessages],
+    )
+
+    const [_currentGeoMessages, _currentNavMessages] = useMemo(
+        () => partition(currentMapMessages, isGeoJSONMessage),
+        [currentMapMessages],
+    )
+
     const [messages, setMessages] = React.useState<readonly MessageEvent<unknown>[] | undefined>()
 
-    const [allMapMessages, setAllMapMessages] = React.useState<MapPanelMessage[]>([])
+    const [center, setCenter] = useState<Point>({ lat: 0, lon: 0 })
 
     const [previewTime, setPreviewTime] = React.useState<number | undefined>()
 
     const [renderDone, setRenderDone] = React.useState<(() => void) | undefined>()
 
     // We use a layout effect to setup render handling for our panel. We also setup some topic subscriptions.
+
+    const getCenter = useMemo((): Point => {
+        //set center in Moscow, Russia
+        if (!allNavMessages[0]) return { lat: 55.7522, lon: 37.6156 }
+
+        return {
+            lat: allNavMessages[0].message.latitude,
+            lon: allNavMessages[0].message.longitude,
+        }
+    }, [allNavMessages])
+
+    useEffect(() => {
+        setCenter(getCenter)
+    }, [setCenter, getCenter])
 
     React.useLayoutEffect(() => {
         console.log('this')
@@ -81,6 +126,10 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
 
             if (renderState.allFrames) {
                 setAllMapMessages(renderState.allFrames as MapPanelMessage[])
+            }
+
+            if (renderState.currentFrame && renderState.currentFrame.length > 0) {
+                setCurrentMapMessages(renderState.currentFrame as MapPanelMessage[])
             }
 
             // Only update the current frame if we have new messages.
@@ -143,8 +192,8 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
     return (
         <>
             <h1>Hi, my name is Alex!</h1>
-            {allMapMessages[0]?.message.latitude && allMapMessages[0]?.message.longitude ? (
-                <Map messages={allMapMessages} previewTime={previewTime} />
+            {center ? (
+                <Map centerMap={center} messages={allNavMessages} previewTime={previewTime} />
             ) : (
                 <h2>Waiting for first GPS point...</h2>
             )}
@@ -154,26 +203,19 @@ export function MyMapPanel({ context }: { context: PanelExtensionContext }): JSX
                     return <li key={item.name}>ITEM{JSON.stringify(item)}</li>
                 })}
             </ol> */}
-            All: {allMapMessages?.length}
-            Not all: {messages?.length}
-            MESSAGES
-            <ol>
-                {messages?.map(message => {
-                    return <li key={message.topic}>{JSON.stringify(message.message)}</li>
-                })}
-            </ol>
+            NAV_MESSAGES count: {allNavMessages.length}
             ALL_MESSAGES time: {previewTime ?? '0'}
-            <ol>
-                {allMapMessages.map(message => {
+            {/* <ol>
+                {allNavMessages.map(message => {
                     return (
                         <li key={message.topic}>
                             {JSON.stringify(message.message)}
 
-                            {message.message.latitude}
+                            {message.message.}
                         </li>
                     )
                 })}
-            </ol>
+            </ol> */}
         </>
     )
 }

@@ -1,87 +1,144 @@
-import React from 'react'
-import { MapContainer, Marker, Popup, CircleMarker } from 'react-leaflet'
+import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react'
+import { MapContainer, Popup, CircleMarker } from 'react-leaflet'
 
 import { toSec } from '@foxglove/rostime'
+import { PanelExtensionContext } from '@foxglove/studio'
 
 import { Layers } from 'components/Layers'
 
-import { MapPanelMessage } from 'types/MapPanelMessage'
+import { MapPanelMessage, Point, NavSatFixMsg } from 'types/MapPanelMessage'
+
+// import {
+//     Map as LeafMap,
+//     TileLayer,
+//     LatLngBounds,
+//     FeatureGroup,
+//     LayerGroup,
+//     geoJSON,
+//     Layer,
+// } from 'leaflet'
 
 import './index.css'
 
 type MapProps = {
-    messages?: MapPanelMessage[]
-    previewTime?: number
+    centerMap: Point
+    messages: MapPanelMessage<NavSatFixMsg>[]
+    previewTime?: number | undefined
+    context: PanelExtensionContext
 }
 
-export function Map({ messages, previewTime }: MapProps): JSX.Element {
-    console.log('none', Marker, Popup, messages)
+type CustomCircleMarkeProps = {
+    center: [number, number]
+    context: PanelExtensionContext
+    popupContent?: ReactNode
+}
 
-    const [filteredMessages, setFilteredMessages] = React.useState<MapPanelMessage[]>()
+const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ center, popupContent, context }) => {
+    const onHover = useCallback(
+        (messageEvent?: MessageEvent<>) => {
+            context.setPreviewTime(
+                messageEvent == undefined ? undefined : toSec(messageEvent.receiveTime),
+            )
+        },
+        [context],
+    )
+
+    const onClick = useCallback(
+        (messageEvent: MessageEvent<unknown>) => {
+            context.seekPlayback?.(toSec(messageEvent.receiveTime))
+        },
+        [context],
+    )
+
+    const innerHandlers = useMemo(
+        () => ({
+            click() {
+                onClick()
+            },
+            mouseover() {
+                onHover()
+            },
+            mouseout() {
+                onHover(undefined)
+            },
+        }),
+        [],
+    )
+
+    return (
+        <CircleMarker eventHandlers={innerHandlers} center={center} radius={2}>
+            <Popup>{popupContent}</Popup>
+        </CircleMarker>
+    )
+}
+
+export const Map: FC<MapProps> = ({ messages, previewTime, centerMap, context }) => {
+    // const [filteredMessages, setFilteredMessages] = useState<MapPanelMessage[]>()
+
+    const [text, setText] = useState('')
+
+    // const mapContainerRef = useRef<HTMLDivElement>()
 
     // const center = filteredMessages?[0].message.  ?  :[55.7522, 37.6156]
 
-    React.useEffect(() => {
-        if (previewTime == undefined) {
-            return
-        }
+    // const map = useMapEvents({
+    //     click(),
+    // })
 
-        // get the point occuring most recently before preview time but not after preview time
-        const filteredMessagesArr = messages?.filter(
-            message => toSec(message.receiveTime) < previewTime,
-        )
+    const innerHandlers = useMemo(
+        () => ({
+            click() {
+                setText('some click')
+            },
+        }),
+        [],
+    )
 
-        setFilteredMessages(filteredMessagesArr)
+    // useEffect(() => {
+    //     if (previewTime == undefined) {
+    //         return
+    //     }
 
-        // const event = minBy(prevNavMessages, message => previewTime - toSec(message.receiveTime))
-        // if (!event) {
-        //     return
-        // }
+    //     // get the point occuring most recently before preview time but not after preview time
+    //     const filteredMessagesArr = messages?.filter(
+    //         message => toSec(message.receiveTime) < previewTime,
+    //     )
 
-        // const topicLayer = topicLayers.get(event.topic)
-
-        // const marker = new CircleMarker([event.message.latitude, event.message.longitude], {
-        //     radius: POINT_MARKER_RADIUS,
-        //     color: topicLayer ? darkColor(topicLayer.baseColor) : undefined,
-        //     stroke: false,
-        //     fillOpacity: 1,
-        //     interactive: false,
-        // })
-
-        // marker.addTo(currentMap)
-        // return () => {
-        //     marker.remove()
-        // }
-    }, [filteredMessages, previewTime])
+    //     setFilteredMessages(filteredMessagesArr)
+    // }, [filteredMessages, previewTime])
 
     return (
-        <MapContainer
-            center={[55.7522, 37.6156]}
-            zoom={5}
-            scrollWheelZoom={true}
-            zoomControl={true}
-        >
-            <Layers />
-            {/* <Marker position={[55.7522, 37.6156]}>
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-            </Marker> */}
+        <>
+            <MapContainer
+                center={[centerMap.lat, centerMap.lon]}
+                zoom={5}
+                scrollWheelZoom={true}
+                zoomControl={true}
+            >
+                <Layers />
 
-            {filteredMessages?.map(item => {
-                return (
-                    <CircleMarker
+                {/* {filteredMessages?.map(item => (
+                    <CustomCircleMarker
+                        key={item.message.latitude}
                         center={[item.message.latitude, item.message.longitude]}
-                        radius={2}
-                    >
-                        <Popup>{item.receiveTime}</Popup>
-                    </CircleMarker>
-                )
-            })}
+                        context={context}
+                    />
+                ))} */}
 
-            <CircleMarker center={[55.7522, 37.6156]} radius={2}>
-                <Popup>some data</Popup>
-            </CircleMarker>
-        </MapContainer>
+                {messages?.map(item => (
+                    <CustomCircleMarker
+                        key={item.message}
+                        center={[item.message.latitude, item.message.longitude]}
+                        context={context}
+                    />
+                ))}
+
+                <CircleMarker eventHandlers={innerHandlers} center={[55.7522, 37.6156]} radius={2}>
+                    <Popup>some data</Popup>
+                </CircleMarker>
+            </MapContainer>
+
+            {text}
+        </>
     )
 }
