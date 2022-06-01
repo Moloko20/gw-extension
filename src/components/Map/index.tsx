@@ -2,11 +2,11 @@ import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react'
 import { MapContainer, Popup, CircleMarker } from 'react-leaflet'
 
 import { toSec } from '@foxglove/rostime'
-import { PanelExtensionContext } from '@foxglove/studio'
+import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 
 import { Layers } from 'components/Layers'
 
-import { MapPanelMessage, Point, NavSatFixMsg } from 'types/MapPanelMessage'
+import { Point, NavSatFixMsg } from 'types/MapPanelMessage'
 
 // import {
 //     Map as LeafMap,
@@ -20,25 +20,16 @@ import { MapPanelMessage, Point, NavSatFixMsg } from 'types/MapPanelMessage'
 
 import './index.css'
 
-type MapProps = {
-    centerMap: Point
-    messages: MapPanelMessage<NavSatFixMsg>[]
-    previewTime?: number | undefined
-    context: PanelExtensionContext
-}
-
 type CustomCircleMarkeProps = {
-    center: [number, number]
     context: PanelExtensionContext
+    message: MessageEvent<NavSatFixMsg>
     popupContent?: ReactNode
 }
 
-const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ center, popupContent, context }) => {
+const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ popupContent, context, message }) => {
     const onHover = useCallback(
-        (messageEvent?: MessageEvent<>) => {
-            context.setPreviewTime(
-                messageEvent == undefined ? undefined : toSec(messageEvent.receiveTime),
-            )
+        (message?: MessageEvent<NavSatFixMsg>) => {
+            context.setPreviewTime(message == undefined ? undefined : toSec(message.receiveTime))
         },
         [context],
     )
@@ -53,10 +44,10 @@ const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ center, popupContent, 
     const innerHandlers = useMemo(
         () => ({
             click() {
-                onClick()
+                onClick(message)
             },
             mouseover() {
-                onHover()
+                onHover(message)
             },
             mouseout() {
                 onHover(undefined)
@@ -66,13 +57,24 @@ const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ center, popupContent, 
     )
 
     return (
-        <CircleMarker eventHandlers={innerHandlers} center={center} radius={2}>
+        <CircleMarker
+            eventHandlers={innerHandlers}
+            center={[message.message.latitude, message.message.longitude]}
+            radius={2}
+        >
             <Popup>{popupContent}</Popup>
         </CircleMarker>
     )
 }
 
-export const Map: FC<MapProps> = ({ messages, previewTime, centerMap, context }) => {
+type MapProps = {
+    centerMap: Point
+    messages: MessageEvent<NavSatFixMsg>[]
+    context: PanelExtensionContext
+    previewTime?: number | undefined
+}
+
+export const Map: FC<MapProps> = ({ messages, centerMap, context }) => {
     // const [filteredMessages, setFilteredMessages] = useState<MapPanelMessage[]>()
 
     const [text, setText] = useState('')
@@ -127,8 +129,8 @@ export const Map: FC<MapProps> = ({ messages, previewTime, centerMap, context })
 
                 {messages?.map(item => (
                     <CustomCircleMarker
-                        key={item.message}
-                        center={[item.message.latitude, item.message.longitude]}
+                        key={item.message.latitude}
+                        message={item}
                         context={context}
                     />
                 ))}

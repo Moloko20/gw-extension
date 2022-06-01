@@ -65,7 +65,7 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
 
     const [messages, setMessages] = React.useState<readonly MessageEvent<unknown>[] | undefined>()
 
-    const [center, setCenter] = useState<Point>({ lat: 0, lon: 0 })
+    const [center, setCenter] = useState<Point>()
 
     const [previewTime, setPreviewTime] = React.useState<number | undefined>()
 
@@ -73,19 +73,18 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
 
     // We use a layout effect to setup render handling for our panel. We also setup some topic subscriptions.
 
-    const getCenter = useMemo((): Point => {
-        //set center in Moscow, Russia
-        if (!allNavMessages[0]) return { lat: 55.7522, lon: 37.6156 }
+    useEffect(() => {
+        if (!allNavMessages[0]) return
 
-        return {
+        if (!allNavMessages[0]?.message?.latitude || allNavMessages[0]?.message?.longitude) {
+            setCenter({ lat: 55.7522, lon: 37.6156 })
+        }
+
+        setCenter({
             lat: allNavMessages[0].message.latitude,
             lon: allNavMessages[0].message.longitude,
-        }
+        })
     }, [allNavMessages])
-
-    useEffect(() => {
-        setCenter(getCenter)
-    }, [setCenter, getCenter])
 
     React.useLayoutEffect(() => {
         console.log('this')
@@ -131,11 +130,6 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
             if (renderState.currentFrame && renderState.currentFrame.length > 0) {
                 setCurrentMapMessages(renderState.currentFrame as MapPanelMessage[])
             }
-
-            // Only update the current frame if we have new messages.
-            // if (renderState.currentFrame && renderState.currentFrame.length > 0) {
-            //     setCurrentMapMessages(renderState.currentFrame as MapPanelMessage[])
-            // }
         }
 
         // After adding a render handler, you must indicate which fields from RenderState will trigger updates.
@@ -149,9 +143,6 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
         // subscribe to some topics, you could do this within other effects, based on input fields, etc
         // Once you subscribe to topics, currentFrame will contain message events from those topics (assuming there are messages).
         context.subscribe(['/gps'])
-
-        console.table(topics)
-        console.table(messages)
     }, [context, messages, topics])
 
     // React.useEffect(() => {
@@ -193,29 +184,20 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
         <>
             <h1>Hi, my name is Alex!</h1>
             {center ? (
-                <Map centerMap={center} messages={allNavMessages} previewTime={previewTime} />
+                <Map
+                    context={context}
+                    centerMap={center}
+                    messages={allNavMessages}
+                    previewTime={previewTime}
+                />
             ) : (
                 <h2>Waiting for first GPS point...</h2>
             )}
-            {/* TOPICS 
-            <ol>
-                {topics?.map(item => {
-                    return <li key={item.name}>ITEM{JSON.stringify(item)}</li>
-                })}
-            </ol> */}
-            NAV_MESSAGES count: {allNavMessages.length}
-            ALL_MESSAGES time: {previewTime ?? '0'}
-            {/* <ol>
-                {allNavMessages.map(message => {
-                    return (
-                        <li key={message.topic}>
-                            {JSON.stringify(message.message)}
 
-                            {message.message.}
-                        </li>
-                    )
-                })}
-            </ol> */}
+            <div>
+                NAV_MESSAGES count: {allNavMessages.length}
+                ALL_MESSAGES time: {previewTime ?? '0'}
+            </div>
         </>
     )
 }
