@@ -53,7 +53,7 @@ const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ popupContent, context,
                 onHover(undefined)
             },
         }),
-        [],
+        [message],
     )
 
     return (
