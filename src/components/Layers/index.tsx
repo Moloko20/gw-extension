@@ -24,7 +24,7 @@ export const Layers: React.FC = () => {
                     maxZoom={24}
                 />
             </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer checked name="Спутник">
+            <LayersControl.BaseLayer name="Спутник">
                 <TileLayer
                     attribution='&amp;copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
