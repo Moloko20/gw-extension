@@ -74,7 +74,11 @@ type MapProps = {
     previewTime?: number | undefined
 }
 
-export const Map: FC<MapProps> = ({ messages, centerMap, context }) => {
+export const Map: FC<MapProps> = ({
+    messages,
+    centerMap = { lat: 55.7522, lon: 37.6156 },
+    context,
+}) => {
     // const [filteredMessages, setFilteredMessages] = useState<MapPanelMessage[]>()
 
     const [text, setText] = useState('')
