@@ -1,5 +1,5 @@
-import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react'
-import { MapContainer, Popup, CircleMarker } from 'react-leaflet'
+import React, { FC, ReactNode, useCallback, useMemo, useState, useEffect, memo } from 'react'
+import { MapContainer, Popup, CircleMarker, useMap } from 'react-leaflet'
 
 import { toSec } from '@foxglove/rostime'
 import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
@@ -7,16 +7,6 @@ import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 import { Layers } from 'components/Layers'
 
 import { Point, NavSatFixMsg } from 'types/MapPanelMessage'
-
-// import {
-//     Map as LeafMap,
-//     TileLayer,
-//     LatLngBounds,
-//     FeatureGroup,
-//     LayerGroup,
-//     geoJSON,
-//     Layer,
-// } from 'leaflet'
 
 import './index.css'
 
@@ -67,6 +57,43 @@ const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ popupContent, context,
     )
 }
 
+type Config = {
+    customTileUrl: string
+    disabledTopics: string[]
+    layer: string
+    zoomLevel?: number
+}
+
+type ZoomProps = {
+    context: PanelExtensionContext
+    config: Config
+}
+
+const ZoomComponent: FC<ZoomProps> = ({ context, config }) => {
+    const map = useMap()
+
+    useEffect(() => {
+        const zoomChange = () => {
+            context.saveState({
+                zoomLevel: map.getZoom(),
+            })
+        }
+
+        map.on('zoom', zoomChange)
+        return () => {
+            map.off('zoom', zoomChange)
+        }
+    }, [context, map])
+
+    useEffect(() => {
+        context.saveState(config)
+    }, [config])
+
+    return null
+}
+
+const Zoom = memo(ZoomComponent)
+
 type MapProps = {
     centerMap: Point
     messages: MessageEvent<NavSatFixMsg>[]
@@ -79,57 +106,33 @@ export const Map: FC<MapProps> = ({
     centerMap = { lat: 55.7522, lon: 37.6156 },
     context,
 }) => {
-    // const [filteredMessages, setFilteredMessages] = useState<MapPanelMessage[]>()
+    const [config] = useState<Config>(() => {
+        const initialConfig =
+            context && context.initialState
+                ? (context.initialState as Partial<Config>)
+                : {
+                      customTileUrl: '',
+                      disabledTopics: [''],
+                      layer: '',
+                      zoomLevel: 5,
+                  }
 
-    const [text, setText] = useState('')
-
-    // const mapContainerRef = useRef<HTMLDivElement>()
-
-    // const center = filteredMessages?[0].message.  ?  :[55.7522, 37.6156]
-
-    // const map = useMapEvents({
-    //     click(),
-    // })
-
-    const innerHandlers = useMemo(
-        () => ({
-            click() {
-                setText('some click')
-            },
-        }),
-        [],
-    )
-
-    // useEffect(() => {
-    //     if (previewTime == undefined) {
-    //         return
-    //     }
-
-    //     // get the point occuring most recently before preview time but not after preview time
-    //     const filteredMessagesArr = messages?.filter(
-    //         message => toSec(message.receiveTime) < previewTime,
-    //     )
-
-    //     setFilteredMessages(filteredMessagesArr)
-    // }, [filteredMessages, previewTime])
+        initialConfig.disabledTopics = initialConfig.disabledTopics ?? []
+        initialConfig.layer = initialConfig.layer ?? 'map'
+        initialConfig.customTileUrl = initialConfig.customTileUrl ?? ''
+        initialConfig.zoomLevel
+        return initialConfig as Config
+    })
 
     return (
         <>
             <MapContainer
                 center={[centerMap.lat, centerMap.lon]}
-                zoom={5}
+                zoom={config.zoomLevel}
                 scrollWheelZoom={true}
                 zoomControl={true}
             >
                 <Layers />
-
-                {/* {filteredMessages?.map(item => (
-                    <CustomCircleMarker
-                        key={item.message.latitude}
-                        center={[item.message.latitude, item.message.longitude]}
-                        context={context}
-                    />
-                ))} */}
 
                 {messages?.map(item => (
                     <CustomCircleMarker
@@ -139,12 +142,12 @@ export const Map: FC<MapProps> = ({
                     />
                 ))}
 
-                <CircleMarker eventHandlers={innerHandlers} center={[55.7522, 37.6156]} radius={2}>
+                <Zoom context={context} config={config} />
+
+                <CircleMarker center={[55.7522, 37.6156]} radius={2}>
                     <Popup>some data</Popup>
                 </CircleMarker>
             </MapContainer>
-
-            {text}
         </>
     )
 }
