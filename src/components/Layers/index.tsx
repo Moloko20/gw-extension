@@ -5,7 +5,7 @@ import './index.css'
 
 export const Layers: React.FC = () => {
     return (
-        <LayersControl position="topright">
+        <LayersControl position="topright" collapsed={false}>
             {/* {Give the layer a name that will be displayed inside of the layers control. We also want to pass the checked prop to whichever map tile we want displayed as the default:} */}
             <LayersControl.BaseLayer checked name="Схема">
                 <TileLayer
@@ -15,7 +15,6 @@ export const Layers: React.FC = () => {
                     maxZoom={24}
                 />
             </LayersControl.BaseLayer>
-            {}
             <LayersControl.BaseLayer name="Топо карта">
                 <TileLayer
                     attribution='Map data: &amp;copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &amp;copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
