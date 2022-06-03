@@ -1,36 +1,94 @@
-import React from 'react'
-import { TileLayer, LayersControl } from 'react-leaflet'
+import React, { FC, useEffect, memo } from 'react'
+import { TileLayer, LayersControl, useMap } from 'react-leaflet'
+
+import { PanelExtensionContext } from '@foxglove/studio'
+
+import { LayersControlEvent } from 'leaflet'
+
+import { Config } from 'types/Config'
 
 import './index.css'
 
-export const Layers: React.FC = () => {
+type CustomLayerType = {
+    attribution: string
+    url: string
+    name: string
+}
+
+const layers: CustomLayerType[] = [
+    {
+        attribution: '&amp;copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        name: 'Схема',
+    },
+    {
+        attribution:
+            'Map data: &amp;copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &amp;copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+        url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        name: 'Топо карта',
+    },
+    {
+        attribution: '&amp;copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        name: 'Спутник',
+    },
+]
+
+type CustomLayerProps = {
+    layer: CustomLayerType
+    currentLayerName: string
+}
+
+const CustomLayerComponent: FC<CustomLayerProps> = ({ layer, currentLayerName }) => {
+    return (
+        <LayersControl.BaseLayer
+            checked={currentLayerName === layer.name ? true : false}
+            name={layer.name}
+        >
+            <TileLayer
+                attribution={layer.attribution}
+                url={layer.url}
+                maxNativeZoom={18}
+                maxZoom={24}
+            />
+        </LayersControl.BaseLayer>
+    )
+}
+
+const CustomLayer = memo(CustomLayerComponent)
+
+type LayersProps = {
+    context: PanelExtensionContext
+    config: Config
+}
+
+export const LayersComponent: FC<LayersProps> = ({ context, config }) => {
+    const map = useMap()
+
+    useEffect(() => {
+        const layerSelectHanlder = (layeTitle: LayersControlEvent) => {
+            context.saveState({
+                layer: layeTitle.name,
+            })
+        }
+
+        map.on('baselayerchange', layerSelectHanlder)
+        return () => {
+            map.off('baselayerchange', layerSelectHanlder)
+        }
+    }, [context, map])
+
+    useEffect(() => {
+        context.saveState(config)
+    }, [config])
+
     return (
         <LayersControl position="topright" collapsed={false}>
-            {/* {Give the layer a name that will be displayed inside of the layers control. We also want to pass the checked prop to whichever map tile we want displayed as the default:} */}
-            <LayersControl.BaseLayer checked name="Схема">
-                <TileLayer
-                    attribution='&amp;copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    maxNativeZoom={18}
-                    maxZoom={24}
-                />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer name="Топо карта">
-                <TileLayer
-                    attribution='Map data: &amp;copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &amp;copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-                    url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
-                    maxNativeZoom={18}
-                    maxZoom={24}
-                />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer name="Спутник">
-                <TileLayer
-                    attribution='&amp;copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                    maxNativeZoom={18}
-                    maxZoom={24}
-                />
-            </LayersControl.BaseLayer>
+            {layers.map(layer => (
+                <CustomLayer layer={layer} currentLayerName={config.layer} />
+            ))}
         </LayersControl>
     )
 }
+
+export const Layers = memo(LayersComponent)

@@ -7,6 +7,7 @@ import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 import { Layers } from 'components/Layers'
 
 import { Point, NavSatFixMsg } from 'types/MapPanelMessage'
+import { Config } from 'types/Config'
 
 import './index.css'
 
@@ -55,13 +56,6 @@ const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ popupContent, context,
             <Popup>{popupContent}</Popup>
         </CircleMarker>
     )
-}
-
-type Config = {
-    customTileUrl: string
-    disabledTopics: string[]
-    layer: string
-    zoomLevel?: number
 }
 
 type ZoomProps = {
@@ -113,14 +107,13 @@ export const Map: FC<MapProps> = ({
                 : {
                       customTileUrl: '',
                       disabledTopics: [''],
-                      layer: '',
+                      layer: 'Схема',
                       zoomLevel: 5,
                   }
 
         initialConfig.disabledTopics = initialConfig.disabledTopics ?? []
         initialConfig.layer = initialConfig.layer ?? 'map'
         initialConfig.customTileUrl = initialConfig.customTileUrl ?? ''
-        initialConfig.zoomLevel
         return initialConfig as Config
     })
 
@@ -132,7 +125,7 @@ export const Map: FC<MapProps> = ({
                 scrollWheelZoom={true}
                 zoomControl={true}
             >
-                <Layers />
+                <Layers context={context} config={config} />
 
                 {messages?.map(item => (
                     <CustomCircleMarker
@@ -143,10 +136,6 @@ export const Map: FC<MapProps> = ({
                 ))}
 
                 <Zoom context={context} config={config} />
-
-                <CircleMarker center={[55.7522, 37.6156]} radius={2}>
-                    <Popup>some data</Popup>
-                </CircleMarker>
             </MapContainer>
         </>
     )
