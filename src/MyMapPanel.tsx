@@ -11,25 +11,9 @@ import { Map } from 'components/Map'
 import { MapPanelMessage, Point } from 'types/MapPanelMessage'
 import { FoxgloveMessages } from 'types/FoxgloveMessages'
 
-// import L from 'leaflet'
-// import LeafletRetinaIconUrl from 'leaflet/dist/images/marker-icon-2x.png'
-// import LeafletIconUrl from 'leaflet/dist/images/marker-icon.png'
-// import LeafletShadowIconUrl from 'leaflet/dist/images/marker-shadow.png'
-
-// import 'leaflet/dist/leaflet.css'
-
-// L.Marker.prototype.options.icon = L.icon({
-//     iconUrl: LeafletIconUrl,
-//     iconRetinaUrl: LeafletRetinaIconUrl,
-//     shadowUrl: LeafletShadowIconUrl,
-//     iconSize: [25, 41],
-//     iconAnchor: [12, 41],
-//     popupAnchor: [1, -34],
-//     tooltipAnchor: [16, -28],
-//     shadowSize: [41, 41],
-// })
-
 //const destDir = path_1.join("/mnt/c/Users/Alex/.foxglove-studio/extensions", dirName);
+
+import './index.sass'
 
 const isGeoJSONMessage = (
     message: MessageEvent<unknown>,
@@ -40,8 +24,6 @@ const isGeoJSONMessage = (
         'geojson' in message.message
     )
 }
-
-import './index.sass'
 
 type MyMapPanelProps = {
     context: PanelExtensionContext
@@ -144,36 +126,6 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
         // Once you subscribe to topics, currentFrame will contain message events from those topics (assuming there are messages).
         context.subscribe(['/gps'])
     }, [context, messages, topics])
-
-    // React.useEffect(() => {
-    //     // if (!currentMap || previewTime == undefined) {
-    //     //     return
-    //     // }
-
-    //     // get the point occuring most recently before preview time but not after preview time
-    //     const prevNavMessages = messages.filter(message => toSec(message.receiveTime) < previewTime)
-    //     const event = minBy(prevNavMessages, message => previewTime - toSec(message.receiveTime))
-    //     if (!event) {
-    //         return
-    //     }
-
-    //     const topicLayer = topicLayers.get(event.topic)
-
-    //     const marker = new CircleMarker([event.message.latitude, event.message.longitude], {
-    //         radius: 2,
-    //         color: '#000',
-    //         stroke: false,
-    //         fillOpacity: 1,
-    //         interactive: false,
-    //     })
-
-    //     marker.addTo(currentMap)
-    //     return () => {
-    //         marker.remove()
-    //     }
-    // }, [allNavMessages, currentMap, previewTime, topicLayers])
-
-    // require('./index.sass')
 
     // invoke the done callback once the render is complete
     React.useEffect(() => {
