@@ -345,8 +345,8 @@ svg.leaflet-image-layer.leaflet-interactive path
 	border-radius: 5px
 	
 .leaflet-control-layers-toggle 
-	background-image: url(https://cdn.icon-icons.com/icons2/2098/PNG/512/layers_icon_128831.png)
-	background-size: 90%
+	// background-image: url(https://cdn.icon-icons.com/icons2/2098/PNG/512/layers_icon_128831.png)
+	// background-size: 90%
 
 	width: 36px
 	height: 36px
@@ -591,46 +591,45 @@ svg.leaflet-image-layer.leaflet-interactive path
 .leaflet-tooltip-bottom 
 	margin-top: 6px
 
+	&::before
+		top: 0
+		margin-top: -12px
+		margin-left: -6px
+		border-bottom-color: #fff
+
 .leaflet-tooltip-top 
 	margin-top: -6px
+
+	&::before
+		bottom: 0
+		margin-bottom: -12px
+		border-top-color: #fff
 
 .leaflet-tooltip-bottom:before,
 .leaflet-tooltip-top:before 
 	left: 50%
 	margin-left: -6px
 	
-.leaflet-tooltip-top:before 
-	bottom: 0
-	margin-bottom: -12px
-	border-top-color: #fff
-	
-.leaflet-tooltip-bottom:before 
-	top: 0
-	margin-top: -12px
+.leaflet-tooltip-left
 	margin-left: -6px
-	border-bottom-color: #fff
-	
-.leaflet-tooltip-left 
-	margin-left: -6px
+
+	&::before
+		right: 0
+		margin-right: -12px
+		border-left-color: #fff
 
 .leaflet-tooltip-right 
 	margin-left: 6px
+
+	&::before
+		left: 0
+		margin-left: -12px
+		border-right-color: #fff
 
 .leaflet-tooltip-left:before,
 .leaflet-tooltip-right:before 
 	top: 50%
 	margin-top: -6px
-	
-.leaflet-tooltip-left:before 
-	right: 0
-	margin-right: -12px
-	border-left-color: #fff
-	
-.leaflet-tooltip-right:before 
-	left: 0
-	margin-left: -12px
-	border-right-color: #fff
-	
 
 /* Printing */
 	
