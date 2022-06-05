@@ -13,6 +13,7 @@ import { FoxgloveMessages } from 'types/FoxgloveMessages'
 
 //const destDir = path_1.join("/mnt/c/Users/Alex/.foxglove-studio/extensions", dirName);
 
+import 'leaflet/dist/leaflet.css'
 import './index.sass'
 
 const isGeoJSONMessage = (
