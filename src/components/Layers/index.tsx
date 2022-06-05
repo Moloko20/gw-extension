@@ -7,8 +7,6 @@ import { LayersControlEvent } from 'leaflet'
 
 import { Config } from 'types/Config'
 
-import './index.css'
-
 type CustomLayerType = {
     attribution: string
     url: string
@@ -66,9 +64,9 @@ export const LayersComponent: FC<LayersProps> = ({ context, config }) => {
     const map = useMap()
 
     useEffect(() => {
-        const layerSelectHanlder = (layeTitle: LayersControlEvent) => {
+        const layerSelectHanlder = (layerTitle: LayersControlEvent) => {
             context.saveState({
-                layer: layeTitle.name,
+                layer: layerTitle.name,
             })
         }
 

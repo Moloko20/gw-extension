@@ -9,8 +9,6 @@ import { Layers } from 'components/Layers'
 import { Point, NavSatFixMsg } from 'types/MapPanelMessage'
 import { Config } from 'types/Config'
 
-import './index.css'
-
 type CustomCircleMarkeProps = {
     context: PanelExtensionContext
     message: MessageEvent<NavSatFixMsg>
@@ -101,19 +99,12 @@ export const Map: FC<MapProps> = ({
     context,
 }) => {
     const [config] = useState<Config>(() => {
-        const initialConfig =
-            context && context.initialState
-                ? (context.initialState as Partial<Config>)
-                : {
-                      customTileUrl: '',
-                      disabledTopics: [''],
-                      layer: 'Схема',
-                      zoomLevel: 5,
-                  }
+        const initialConfig = context.initialState as Partial<Config>
 
         initialConfig.disabledTopics = initialConfig.disabledTopics ?? []
-        initialConfig.layer = initialConfig.layer ?? 'map'
+        initialConfig.layer = initialConfig.layer ?? 'Схема'
         initialConfig.customTileUrl = initialConfig.customTileUrl ?? ''
+        initialConfig.zoomLevel = initialConfig.zoomLevel ?? 7
         return initialConfig as Config
     })
 
