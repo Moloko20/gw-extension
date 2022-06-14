@@ -33,9 +33,6 @@ module.exports = {
             plugins: [new TsConfigPathsPlugin()],
         }
 
-        console.log('MODULES', config.module)
-        console.log('RESOLVE', config.resolve)
-
         return config
     },
 }
