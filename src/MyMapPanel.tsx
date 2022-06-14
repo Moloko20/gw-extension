@@ -135,7 +135,6 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
 
     return (
         <>
-            <h1>Hi, my name is Alex!</h1>
             {center ? (
                 <Map
                     context={context}
