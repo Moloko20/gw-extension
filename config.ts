@@ -28,6 +28,7 @@ module.exports = {
                 },
             ],
         })
+
         config.resolve = {
             ...config.resolve,
             plugins: [new TsConfigPathsPlugin()],

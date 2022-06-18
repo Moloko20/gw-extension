@@ -1,4 +1,4 @@
-import React, { FC, StrictMode, useState, useMemo, useEffect } from 'react'
+import React, { StrictMode, useState, useMemo, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglove/studio'
@@ -30,31 +30,19 @@ type MyMapPanelProps = {
     context: PanelExtensionContext
 }
 
-export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
+export const MyMapPanel: React.FC<MyMapPanelProps> = ({ context }) => {
     const [topics, setTopics] = React.useState<readonly Topic[] | undefined>()
-
     const [allMapMessages, setAllMapMessages] = useState<MapPanelMessage[]>([])
-    const [currentMapMessages, setCurrentMapMessages] = useState<MapPanelMessage[]>([])
 
     const [_allGeoMessages, allNavMessages] = useMemo(
         () => partition(allMapMessages, isGeoJSONMessage),
         [allMapMessages],
     )
 
-    const [_currentGeoMessages, _currentNavMessages] = useMemo(
-        () => partition(currentMapMessages, isGeoJSONMessage),
-        [currentMapMessages],
-    )
-
     const [messages, setMessages] = React.useState<readonly MessageEvent<unknown>[] | undefined>()
-
     const [center, setCenter] = useState<Point>()
-
     const [previewTime, setPreviewTime] = React.useState<number | undefined>()
-
     const [renderDone, setRenderDone] = React.useState<(() => void) | undefined>()
-
-    // We use a layout effect to setup render handling for our panel. We also setup some topic subscriptions.
 
     useEffect(() => {
         if (!allNavMessages[0]) return
@@ -110,9 +98,9 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
                 setAllMapMessages(renderState.allFrames as MapPanelMessage[])
             }
 
-            if (renderState.currentFrame && renderState.currentFrame.length > 0) {
-                setCurrentMapMessages(renderState.currentFrame as MapPanelMessage[])
-            }
+            // if (renderState.currentFrame && renderState.currentFrame.length > 0) {
+            //     setCurrentMapMessages(renderState.currentFrame as MapPanelMessage[])
+            // }
         }
 
         // After adding a render handler, you must indicate which fields from RenderState will trigger updates.
@@ -128,7 +116,6 @@ export const MyMapPanel: FC<MyMapPanelProps> = ({ context }) => {
         context.subscribe(['/gps'])
     }, [context, messages, topics])
 
-    // invoke the done callback once the render is complete
     React.useEffect(() => {
         renderDone?.()
     }, [renderDone])

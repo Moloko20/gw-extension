@@ -1,4 +1,4 @@
-import React, { FC, useEffect, memo } from 'react'
+import React, { useEffect, memo } from 'react'
 import { TileLayer, LayersControl, useMap } from 'react-leaflet'
 
 import { PanelExtensionContext } from '@foxglove/studio'
@@ -37,7 +37,7 @@ type CustomLayerProps = {
     currentLayerName: string
 }
 
-const CustomLayerComponent: FC<CustomLayerProps> = ({ layer, currentLayerName }) => {
+const CustomLayerComponent: React.FC<CustomLayerProps> = ({ layer, currentLayerName }) => {
     return (
         <LayersControl.BaseLayer
             checked={currentLayerName === layer.name ? true : false}
@@ -60,7 +60,7 @@ type LayersProps = {
     config: Config
 }
 
-export const LayersComponent: FC<LayersProps> = ({ context, config }) => {
+export const LayersComponent: React.FC<LayersProps> = ({ context, config }) => {
     const map = useMap()
 
     useEffect(() => {

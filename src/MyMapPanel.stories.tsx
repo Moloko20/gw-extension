@@ -1,19 +1,12 @@
 import React from 'react'
 
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+import { ComponentStory } from '@storybook/react'
 
 import { PanelExtensionContext } from '@foxglove/studio'
 
 import { MyMapPanel } from './MyMapPanel'
 
-// import { Marker, MarkerAction, MarkerType, TF } from './ros'
-
-export default {
-    title: 'MyMapPanel',
-    component: MyMapPanel,
-} as ComponentMeta<typeof MyMapPanel>
-
-export const BasicRender: ComponentStory<typeof MyMapPanel> = () => {
+export const mainPanel: ComponentStory<typeof MyMapPanel> = () => {
     const context: PanelExtensionContext = {
         panelElement: document.createElement('div'),
         initialState: {},

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback, useMemo, useState, useEffect, memo } from 'react'
+import React, { ReactNode, useCallback, useMemo, useState, useEffect, memo } from 'react'
 import { MapContainer, Popup, CircleMarker, useMap } from 'react-leaflet'
 
 import { toSec } from '@foxglove/rostime'
@@ -15,7 +15,11 @@ type CustomCircleMarkeProps = {
     popupContent?: ReactNode
 }
 
-const CustomCircleMarker: FC<CustomCircleMarkeProps> = ({ popupContent, context, message }) => {
+const CustomCircleMarker: React.FC<CustomCircleMarkeProps> = ({
+    popupContent,
+    context,
+    message,
+}) => {
     const onHover = useCallback(
         (message?: MessageEvent<NavSatFixMsg>) => {
             context.setPreviewTime(message == undefined ? undefined : toSec(message.receiveTime))
@@ -61,7 +65,7 @@ type ZoomProps = {
     config: Config
 }
 
-const ZoomComponent: FC<ZoomProps> = ({ context, config }) => {
+const ZoomComponent: React.FC<ZoomProps> = ({ context, config }) => {
     const map = useMap()
 
     useEffect(() => {
@@ -93,7 +97,7 @@ type MapProps = {
     previewTime?: number | undefined
 }
 
-export const Map: FC<MapProps> = ({
+export const Map: React.FC<MapProps> = ({
     messages,
     centerMap = { lat: 55.7522, lon: 37.6156 },
     context,
@@ -103,31 +107,24 @@ export const Map: FC<MapProps> = ({
 
         initialConfig.disabledTopics = initialConfig.disabledTopics ?? []
         initialConfig.layer = initialConfig.layer ?? 'Схема'
-        initialConfig.customTileUrl = initialConfig.customTileUrl ?? ''
         initialConfig.zoomLevel = initialConfig.zoomLevel ?? 7
         return initialConfig as Config
     })
 
     return (
-        <>
-            <MapContainer
-                center={[centerMap.lat, centerMap.lon]}
-                zoom={config.zoomLevel}
-                scrollWheelZoom={true}
-                zoomControl={true}
-            >
-                <Layers context={context} config={config} />
+        <MapContainer
+            center={[centerMap.lat, centerMap.lon]}
+            zoom={config.zoomLevel}
+            scrollWheelZoom={true}
+            zoomControl={true}
+        >
+            <Layers context={context} config={config} />
 
-                {messages?.map(item => (
-                    <CustomCircleMarker
-                        key={item.message.latitude}
-                        message={item}
-                        context={context}
-                    />
-                ))}
+            {messages?.map(item => (
+                <CustomCircleMarker key={item.message.latitude} message={item} context={context} />
+            ))}
 
-                <Zoom context={context} config={config} />
-            </MapContainer>
-        </>
+            <Zoom context={context} config={config} />
+        </MapContainer>
     )
 }
