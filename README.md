@@ -1,6 +1,6 @@
 # gw-extension
 
-## _A Foxglove Studio Extension_
+## _Foxglove Studio Extension_
 
 This extension extends the capabilities of the default Map panel.
 
