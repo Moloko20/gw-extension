@@ -11,6 +11,7 @@ module.exports = {
         '@storybook/addon-interactions',
     ],
     framework: '@storybook/react',
+
     webpackFinal: async config => {
         config.resolve.plugins = [...(config.resolve.plugins || []), new TsconfigPathsPlugin()]
 
@@ -22,13 +23,7 @@ module.exports = {
                 // Translates CSS into CommonJS
                 'css-loader',
                 // Compiles Sass to CSS
-                {
-                    loader: 'sass-loader',
-                    // options: {
-                    //     sourceMap: true,
-                    //     additionalData: '@import "./src/Shared/Styles/variables.sass"',
-                    // },
-                },
+                'sass-loader',
             ],
         })
 
