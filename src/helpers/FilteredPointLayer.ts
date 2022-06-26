@@ -3,7 +3,7 @@ import { eigs } from 'mathjs'
 
 import { MessageEvent } from '@foxglove/studio'
 
-import { NavSatFixMsg, NavSatFixPositionCovarianceType } from 'types/MapPanelMessage'
+import { NavSatFixMsg, NavSatFixPositionCovarianceType } from 'types'
 
 export const POINT_MARKER_RADIUS = 3
 

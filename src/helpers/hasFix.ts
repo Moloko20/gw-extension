@@ -1,6 +1,6 @@
 import { MessageEvent } from '@foxglove/studio'
 
-import { NavSatFixMsg, NavSatFixStatus } from 'types/MapPanelMessage'
+import { NavSatFixMsg, NavSatFixStatus } from 'types'
 
 export const hasFix = (ev: MessageEvent<NavSatFixMsg>): boolean => {
     switch (ev.message.status?.status) {
