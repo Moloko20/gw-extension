@@ -1,13 +1,13 @@
-import React, { ReactNode, useCallback, useMemo, useState, useEffect, memo } from 'react'
-import { MapContainer, Popup, CircleMarker, useMap } from 'react-leaflet'
+import React, { ReactNode, useCallback, useMemo, useState } from 'react'
+import { MapContainer, Popup, CircleMarker } from 'react-leaflet'
 
 import { toSec } from '@foxglove/rostime'
 import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 
 import { Layers } from 'components/Layers'
+import { Zoom } from 'components/Zoom'
 
-import { Point, NavSatFixMsg } from 'types/MapPanelMessage'
-import { Config } from 'types/Config'
+import { Point, NavSatFixMsg, Config } from 'types'
 
 type CustomCircleMarkeProps = {
     context: PanelExtensionContext
@@ -59,36 +59,6 @@ const CustomCircleMarker: React.FC<CustomCircleMarkeProps> = ({
         </CircleMarker>
     )
 }
-
-type ZoomProps = {
-    context: PanelExtensionContext
-    config: Config
-}
-
-const ZoomComponent: React.FC<ZoomProps> = ({ context, config }) => {
-    const map = useMap()
-
-    useEffect(() => {
-        const zoomChange = () => {
-            context.saveState({
-                zoomLevel: map.getZoom(),
-            })
-        }
-
-        map.on('zoom', zoomChange)
-        return () => {
-            map.off('zoom', zoomChange)
-        }
-    }, [context, map])
-
-    useEffect(() => {
-        context.saveState(config)
-    }, [config])
-
-    return null
-}
-
-const Zoom = memo(ZoomComponent)
 
 type MapProps = {
     centerMap: Point
