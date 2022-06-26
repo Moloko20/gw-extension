@@ -44,6 +44,6 @@
         "target": "ESNext",
     },
 
-    // "include": ["src/**/*", "./config.ts"],
+    "include": ["src/**/*", "./config.ts"],
     "exclude": ["node_modules", "dist", "testCode", "src/components/**/*.stories.tsx"]
 }
