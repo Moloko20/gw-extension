@@ -1,12 +1,17 @@
 import React from 'react'
 
-import { ComponentStory } from '@storybook/react'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
 import { PanelExtensionContext } from '@foxglove/studio'
 
-import { MyMapPanel } from './MyMapPanel'
+import { Panel } from 'panel'
 
-export const mainPanel: ComponentStory<typeof MyMapPanel> = () => {
+export default {
+    title: 'MainPanel',
+    component: Panel,
+} as ComponentMeta<typeof Panel>
+
+export const MainPanel: ComponentStory<typeof Panel> = () => {
     const context: PanelExtensionContext = {
         panelElement: document.createElement('div'),
         initialState: {},
@@ -24,7 +29,7 @@ export const mainPanel: ComponentStory<typeof MyMapPanel> = () => {
 
     return (
         <div style={{ width: '100%', height: '100%', top: 0, left: 0, position: 'absolute' }}>
-            <MyMapPanel context={context} />
+            <Panel context={context} defaultCenter={{ lat: 0, lon: 0 }} />
         </div>
     )
 }

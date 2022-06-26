@@ -2,14 +2,12 @@ import React, { StrictMode, useState, useMemo, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglove/studio'
-// import { toSec } from '@foxglove/rostime'
 
 import { partition } from 'lodash'
 
 import { Map } from 'components/Map'
 
-import { MapPanelMessage, Point } from 'types/MapPanelMessage'
-import { FoxgloveMessages } from 'types/FoxgloveMessages'
+import { MapPanelMessage, Point, FoxgloveMessages } from 'types'
 
 //const destDir = path_1.join("/mnt/c/Users/Alex/.foxglove-studio/extensions", dirName);
 
@@ -26,11 +24,12 @@ const isGeoJSONMessage = (
     )
 }
 
-type MyMapPanelProps = {
+type PanelProps = {
     context: PanelExtensionContext
+    defaultCenter?: Point
 }
 
-export const MyMapPanel: React.FC<MyMapPanelProps> = ({ context }) => {
+export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
     const [topics, setTopics] = React.useState<readonly Topic[] | undefined>()
     const [allMapMessages, setAllMapMessages] = useState<MapPanelMessage[]>([])
 
@@ -43,6 +42,10 @@ export const MyMapPanel: React.FC<MyMapPanelProps> = ({ context }) => {
     const [center, setCenter] = useState<Point>()
     const [previewTime, setPreviewTime] = React.useState<number | undefined>()
     const [renderDone, setRenderDone] = React.useState<(() => void) | undefined>()
+
+    useEffect(() => {
+        if (defaultCenter) setCenter(defaultCenter)
+    }, [defaultCenter])
 
     useEffect(() => {
         if (!allNavMessages[0]) return
@@ -58,8 +61,6 @@ export const MyMapPanel: React.FC<MyMapPanelProps> = ({ context }) => {
     }, [allNavMessages])
 
     React.useLayoutEffect(() => {
-        console.log('this')
-
         // The render handler is run by the broader studio system during playback when your panel
         // needs to render because the fields it is watching have changed. How you handle rendering depends on your framework.
         // You can only setup one render handler - usually early on in setting up your panel.
@@ -141,10 +142,10 @@ export const MyMapPanel: React.FC<MyMapPanelProps> = ({ context }) => {
     )
 }
 
-export function initMyMapExtension(context: PanelExtensionContext): void {
+export function initMapExtension(context: PanelExtensionContext): void {
     ReactDOM.render(
         <StrictMode>
-            <MyMapPanel context={context} />
+            <Panel context={context} />
         </StrictMode>,
         context.panelElement,
     )
