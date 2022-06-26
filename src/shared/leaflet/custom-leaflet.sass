@@ -1,9 +1,6 @@
 .leaflet-container
     width: 100%
     height: 800px
-	
-.leaflet-control-layers-toggle
-    background-image: none
 
 .leaflet-retina 
     .leaflet-control-layers-toggle 
@@ -12,11 +9,44 @@
 .leaflet-default-icon-path 
     background-image: none
 
-.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  
-    font-size: 22px
+.leaflet-touch 
+    .leaflet-control-zoom-in, .leaflet-control-zoom-out
+        background-color: #121217
 
-.leaflet-control-layers label 
-    font-size: 14px
+        &:hover
+           background-color: #39383E
+
+        span
+            color: #9480ED
+
+    .leaflet-control-layers, .leaflet-bar
+        border-color: rgba(0,0,0,0.2)
+
+        background-color: #121217
+
+    .leaflet-bar a
+        border-bottom-color: #9480ED
+
+
+.leaflet-control
+    &-layers 
+        &-base
+            label 
+                font-size: 14px
+
+                color: #9480ED
+
+        &-toggle
+            background-image: none
+
+    &-attribution
+        font-size: 11px
+
+        a
+            svg
+                display: none !important
 
 .leaflet-popup-content 
     font-size: 14px
+
+    // #39383E
