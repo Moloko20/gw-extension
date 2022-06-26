@@ -29,7 +29,7 @@
             "components/*": ["src/components/*"],
             "shared/*": ["src/shared/*"],
             "services/*": ["src/services/*"],
-            "types/*": ["src/types/*"],
+            "types": ["src/types"],
             "helpers/*": ["src/helpers/*"]
         },
 
