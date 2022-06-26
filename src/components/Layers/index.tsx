@@ -5,9 +5,9 @@ import { PanelExtensionContext } from '@foxglove/studio'
 
 import { LayersControlEvent } from 'leaflet'
 
-import { CustomLayer } from './CustomLayer'
-
 import { Config, CustomLayerType } from 'types'
+
+import { CustomLayer } from './CustomLayer'
 
 const layers: CustomLayerType[] = [
     {
@@ -56,7 +56,7 @@ export const LayersComponent: React.FC<LayersProps> = ({ context, config }) => {
     return (
         <LayersControl position="topright" collapsed={false}>
             {layers.map(layer => (
-                <CustomLayer layer={layer} currentLayerName={config.layer} />
+                <CustomLayer key={layer.name} layer={layer} currentLayerName={config.layer} />
             ))}
         </LayersControl>
     )
