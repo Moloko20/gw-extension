@@ -1,17 +1,13 @@
 import React, { useEffect, memo } from 'react'
-import { TileLayer, LayersControl, useMap } from 'react-leaflet'
+import { LayersControl, useMap } from 'react-leaflet'
 
 import { PanelExtensionContext } from '@foxglove/studio'
 
 import { LayersControlEvent } from 'leaflet'
 
-import { Config } from 'types/Config'
+import { CustomLayer } from './CustomLayer'
 
-type CustomLayerType = {
-    attribution: string
-    url: string
-    name: string
-}
+import { Config, CustomLayerType } from 'types'
 
 const layers: CustomLayerType[] = [
     {
@@ -31,29 +27,6 @@ const layers: CustomLayerType[] = [
         name: 'Спутник',
     },
 ]
-
-type CustomLayerProps = {
-    layer: CustomLayerType
-    currentLayerName: string
-}
-
-const CustomLayerComponent: React.FC<CustomLayerProps> = ({ layer, currentLayerName }) => {
-    return (
-        <LayersControl.BaseLayer
-            checked={currentLayerName === layer.name ? true : false}
-            name={layer.name}
-        >
-            <TileLayer
-                attribution={layer.attribution}
-                url={layer.url}
-                maxNativeZoom={18}
-                maxZoom={24}
-            />
-        </LayersControl.BaseLayer>
-    )
-}
-
-const CustomLayer = memo(CustomLayerComponent)
 
 type LayersProps = {
     context: PanelExtensionContext
