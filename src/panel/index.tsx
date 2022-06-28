@@ -95,7 +95,7 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
             previewTime={previewTime}
         />
     ) : (
-        <h2>Waiting for first GPS point...</h2>
+        <h2>Waiting for data from the GPS sensor...</h2>
     )
 }
 
