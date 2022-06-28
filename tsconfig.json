@@ -30,7 +30,6 @@
             "shared/*": ["src/shared/*"],
             "services/*": ["src/services/*"],
             "types": ["src/types"],
-            "helpers/*": ["src/helpers/*"]
         },
 
         "types": [
