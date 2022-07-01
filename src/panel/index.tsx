@@ -1,4 +1,4 @@
-import React, { StrictMode, useState, useMemo, useEffect } from 'react'
+import React, { StrictMode, useState, useMemo, useEffect, useLayoutEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 import { PanelExtensionContext, RenderState, Topic, MessageEvent } from '@foxglove/studio'
@@ -58,12 +58,7 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
         })
     }, [allNavMessages])
 
-    React.useLayoutEffect(() => {
-        context.watch('currentFrame')
-        context.watch('topics')
-        context.watch('allFrames')
-        context.watch('previewTime')
-
+    useLayoutEffect(() => {
         context.onRender = (renderState: RenderState, done) => {
             setRenderDone(() => done)
 
@@ -80,10 +75,15 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
             }
         }
 
+        context.watch('currentFrame')
+        context.watch('topics')
+        context.watch('allFrames')
+        context.watch('previewTime')
+
         context.subscribe(['/gps'])
     }, [context, messages, topics])
 
-    React.useEffect(() => {
+    useEffect(() => {
         renderDone?.()
     }, [renderDone])
 
@@ -95,7 +95,9 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
             previewTime={previewTime}
         />
     ) : (
-        <h2>Waiting for data from the GPS sensor...</h2>
+        <div className="title">
+            <h2>Waiting for data from the GPS sensor...</h2>
+        </div>
     )
 }
 

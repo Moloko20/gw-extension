@@ -6,17 +6,13 @@ import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 
 import { NavSatFixMsg } from 'types'
 
-type CustomCircleMarkeProps = {
+type CircleMarkeProps = {
     context: PanelExtensionContext
     message: MessageEvent<NavSatFixMsg>
     popupContent?: ReactNode
 }
 
-export const CircleMarker: React.FC<CustomCircleMarkeProps> = ({
-    popupContent,
-    context,
-    message,
-}) => {
+export const CircleMarker: React.FC<CircleMarkeProps> = ({ popupContent, context, message }) => {
     const onHover = useCallback(
         (message?: MessageEvent<NavSatFixMsg>) => {
             context.setPreviewTime(message == undefined ? undefined : toSec(message.receiveTime))
