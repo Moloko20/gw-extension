@@ -96,7 +96,7 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
         />
     ) : (
         <div className="title">
-            <h2>Waiting for data from the GPS sensor...</h2>
+            <h2>Ожидание данных из датчика GPS...</h2>
         </div>
     )
 }

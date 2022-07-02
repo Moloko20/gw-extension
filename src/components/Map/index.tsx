@@ -27,6 +27,7 @@ export const Map: React.FC<MapProps> = ({
         initialConfig.disabledTopics = initialConfig.disabledTopics ?? []
         initialConfig.layer = initialConfig.layer ?? 'Схема'
         initialConfig.zoomLevel = initialConfig.zoomLevel ?? 7
+
         return initialConfig as Config
     })
 
