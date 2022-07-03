@@ -18,7 +18,7 @@ const CustomLayerComponent: React.FC<CustomLayerProps> = ({ layer, currentLayerN
                 attribution={layer.attribution}
                 url={layer.url}
                 maxNativeZoom={18}
-                maxZoom={24}
+                maxZoom={20}
             />
         </LayersControl.BaseLayer>
     )
