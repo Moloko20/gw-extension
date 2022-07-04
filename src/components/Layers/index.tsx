@@ -11,18 +11,18 @@ import { CustomLayer } from './CustomLayer'
 
 const layers: CustomLayerType[] = [
     {
-        attribution: '©; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         name: 'Схема',
     },
     {
         attribution:
-            'Map data: ©; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: ©; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+            'Map data: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: © <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
         url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         name: 'Топо карта',
     },
     {
-        attribution: '©; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         name: 'Спутник',
     },
