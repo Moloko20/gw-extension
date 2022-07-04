@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { MapContainer } from 'react-leaflet'
+import { MapContainer, ScaleControl } from 'react-leaflet'
 
 import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 
@@ -45,6 +45,7 @@ export const Map: React.FC<MapProps> = ({
             ))}
 
             <Zoom context={context} config={config} />
+            <ScaleControl />
         </MapContainer>
     )
 }
