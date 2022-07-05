@@ -1,18 +1,18 @@
-import React, { ReactNode, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Popup, CircleMarker as LeafletCircleMarker } from 'react-leaflet'
 
 import { toSec } from '@foxglove/rostime'
 import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
 
-import { NavSatFixMsg } from 'types'
+import { NavSatFixMsg } from 'utils/types'
 
 type CircleMarkeProps = {
     context: PanelExtensionContext
     message: MessageEvent<NavSatFixMsg>
-    popupContent?: ReactNode
+    speed: number
 }
 
-export const CircleMarker: React.FC<CircleMarkeProps> = ({ popupContent, context, message }) => {
+export const CircleMarker: React.FC<CircleMarkeProps> = ({ context, message, speed }) => {
     const onHover = useCallback(
         (message?: MessageEvent<NavSatFixMsg>) => {
             context.setPreviewTime(message == undefined ? undefined : toSec(message.receiveTime))
@@ -20,7 +20,7 @@ export const CircleMarker: React.FC<CircleMarkeProps> = ({ popupContent, context
         [context],
     )
 
-    const onClick = useCallback(
+    const onRightClick = useCallback(
         (messageEvent: MessageEvent<unknown>) => {
             context.seekPlayback?.(toSec(messageEvent.receiveTime))
         },
@@ -29,8 +29,8 @@ export const CircleMarker: React.FC<CircleMarkeProps> = ({ popupContent, context
 
     const innerHandlers = useMemo(
         () => ({
-            click() {
-                onClick(message)
+            contextmenu() {
+                onRightClick(message)
             },
             mouseover() {
                 onHover(message)
@@ -48,7 +48,7 @@ export const CircleMarker: React.FC<CircleMarkeProps> = ({ popupContent, context
             center={[message.message.latitude, message.message.longitude]}
             radius={2}
         >
-            <Popup>{popupContent}</Popup>
+            <Popup>Скорость в км/ч: {speed}</Popup>
         </LeafletCircleMarker>
     )
 }
