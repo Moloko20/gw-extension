@@ -5,7 +5,7 @@ import { PanelExtensionContext } from '@foxglove/studio'
 
 import { LayersControlEvent } from 'leaflet'
 
-import { Config, CustomLayerType } from 'types'
+import { Config, CustomLayerType } from 'utils/types'
 
 import { CustomLayer } from './CustomLayer'
 

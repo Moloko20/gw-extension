@@ -7,7 +7,7 @@ import { partition } from 'lodash'
 
 import { Map } from 'components/Map'
 
-import { MapPanelMessage, Point, FoxgloveMessages } from 'types'
+import { MapPanelMessage, Point, FoxgloveMessages } from 'utils/types'
 
 import 'leaflet/dist/leaflet.css'
 import './index.sass'
@@ -38,7 +38,6 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
 
     const [messages, setMessages] = React.useState<readonly MessageEvent<unknown>[] | undefined>()
     const [center, setCenter] = useState<Point>()
-    const [previewTime, setPreviewTime] = React.useState<number | undefined>()
     const [renderDone, setRenderDone] = React.useState<(() => void) | undefined>()
 
     useEffect(() => {
@@ -61,8 +60,6 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
     useLayoutEffect(() => {
         context.onRender = (renderState: RenderState, done) => {
             setRenderDone(() => done)
-
-            setPreviewTime(renderState.previewTime)
 
             setMessages(renderState.currentFrame)
 
@@ -88,12 +85,7 @@ export const Panel: React.FC<PanelProps> = ({ context, defaultCenter }) => {
     }, [renderDone])
 
     return center ? (
-        <Map
-            context={context}
-            centerMap={center}
-            messages={allNavMessages}
-            previewTime={previewTime}
-        />
+        <Map context={context} centerMap={center} messages={allNavMessages} />
     ) : (
         <div className="title">
             <h2>Ожидание данных из датчика GPS...</h2>

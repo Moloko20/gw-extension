@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MapContainer, ScaleControl } from 'react-leaflet'
 
 import { PanelExtensionContext, MessageEvent } from '@foxglove/studio'
@@ -7,13 +7,13 @@ import { Layers } from 'components/Layers'
 import { Zoom } from 'components/Zoom'
 import { CircleMarker } from 'components/CircleMarker'
 
-import { Point, NavSatFixMsg, Config } from 'types'
+import { Point, NavSatFixMsg, Config } from 'utils/types'
+import { getSpeedData } from 'utils/helpers'
 
 type MapProps = {
     centerMap: Point
     messages: MessageEvent<NavSatFixMsg>[]
     context: PanelExtensionContext
-    previewTime?: number | undefined
 }
 
 export const Map: React.FC<MapProps> = ({
@@ -30,6 +30,11 @@ export const Map: React.FC<MapProps> = ({
 
         return initialConfig as Config
     })
+    const [speedData, setSpeedData] = useState<number[]>([])
+
+    useEffect(() => {
+        setSpeedData(getSpeedData(messages))
+    }, [messages])
 
     return (
         <MapContainer
@@ -40,11 +45,25 @@ export const Map: React.FC<MapProps> = ({
         >
             <Layers context={context} config={config} />
 
-            {messages?.map(item => (
-                <CircleMarker key={item.message.latitude} message={item} context={context} />
-            ))}
+            {messages?.map((item, index) => {
+                let speed = speedData[index]
+
+                if (typeof speed === 'undefined') {
+                    speed = -1
+                }
+
+                return (
+                    <CircleMarker
+                        key={item.message.latitude}
+                        message={item}
+                        context={context}
+                        speed={speed}
+                    />
+                )
+            })}
 
             <Zoom context={context} config={config} />
+
             <ScaleControl />
         </MapContainer>
     )

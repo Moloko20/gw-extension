@@ -3,7 +3,7 @@ import { useMap } from 'react-leaflet'
 
 import { PanelExtensionContext } from '@foxglove/studio'
 
-import { Config } from 'types'
+import { Config } from 'utils/types'
 
 type ZoomProps = {
     context: PanelExtensionContext

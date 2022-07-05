@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { LayersControl, TileLayer } from 'react-leaflet'
 
-import { CustomLayerType } from 'types'
+import { CustomLayerType } from 'utils/types'
 
 type CustomLayerProps = {
     layer: CustomLayerType
