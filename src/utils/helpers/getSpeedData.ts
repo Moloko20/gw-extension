@@ -3,30 +3,27 @@ import { toSec } from '@foxglove/rostime'
 
 import { NavSatFixMsg } from 'utils/types'
 
-const getDistanceOnGeoid = (firstPoint: NavSatFixMsg, nextPoint: NavSatFixMsg) => {
-    const firstLat = (firstPoint.latitude * Math.PI) / 180
-    const firstLon = (firstPoint.longitude * Math.PI) / 180
+const degreeToRadian = (coordinate: number) => (coordinate * Math.PI) / 180
 
-    const nextLat = (nextPoint.latitude * Math.PI) / 180
-    const nextLon = (nextPoint.longitude * Math.PI) / 180
+const getDistance = (firstPoint: NavSatFixMsg, nextPoint: NavSatFixMsg) => {
+    const earthRadius = 6371
 
-    const earthRadius = 6378100
+    const firstLat = degreeToRadian(firstPoint.latitude)
+    const firstLon = degreeToRadian(firstPoint.longitude)
 
-    const rho1 = earthRadius * Math.cos(firstLat)
-    const z1 = earthRadius * Math.sin(firstLat)
-    const x1 = rho1 * Math.cos(firstLon)
-    const y1 = rho1 * Math.sin(firstLon)
+    const nextLat = degreeToRadian(nextPoint.latitude)
+    const nextLon = degreeToRadian(nextPoint.longitude)
 
-    const rho2 = earthRadius * Math.cos(nextLat)
-    const z2 = earthRadius * Math.sin(nextLat)
-    const x2 = rho2 * Math.cos(nextLon)
-    const y2 = rho2 * Math.sin(nextLon)
+    const deltaLat = nextLat - firstLat
+    const deltaLon = nextLon - firstLon
 
-    const dot = x1 * x2 + y1 * y2 + z1 * z2
-    const cos_theta = dot / earthRadius ** 2
-    const theta = Math.acos(cos_theta)
+    const a =
+        Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+        Math.cos(firstLat) * Math.cos(nextLat) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2)
 
-    return earthRadius * theta
+    const chord = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+    return earthRadius * chord
 }
 
 const getSpeed = (
@@ -35,13 +32,10 @@ const getSpeed = (
     firstPoint: NavSatFixMsg,
     nextPoint: NavSatFixMsg,
 ) => {
-    const dist = getDistanceOnGeoid(firstPoint, nextPoint)
+    const distKM = getDistance(firstPoint, nextPoint)
+    const timeH = (toSec(nextTimestamp) - toSec(firstTimestamp)) / 3600
 
-    const time_s = toSec(nextTimestamp) - toSec(firstTimestamp)
-    const speed_mps = dist / time_s
-    const speed_kph = (speed_mps * 3600.0) / 1000.0
-
-    return +speed_kph.toFixed(1)
+    return +(distKM / timeH).toFixed(1)
 }
 
 export const getSpeedData = (messages: MessageEvent<NavSatFixMsg>[]) => {

@@ -17,14 +17,14 @@ export const CircleMarker: React.FC<CircleMarkeProps> = ({ context, message, spe
         (message?: MessageEvent<NavSatFixMsg>) => {
             context.setPreviewTime(message == undefined ? undefined : toSec(message.receiveTime))
         },
-        [context],
+        [context, message],
     )
 
     const onRightClick = useCallback(
         (messageEvent: MessageEvent<unknown>) => {
             context.seekPlayback?.(toSec(messageEvent.receiveTime))
         },
-        [context],
+        [context, message],
     )
 
     const innerHandlers = useMemo(
