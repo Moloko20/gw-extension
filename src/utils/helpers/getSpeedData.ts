@@ -17,11 +17,11 @@ const getDistance = (firstPoint: NavSatFixMsg, nextPoint: NavSatFixMsg) => {
     const deltaLat = nextLat - firstLat
     const deltaLon = nextLon - firstLon
 
-    const a =
+    const angle =
         Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
         Math.cos(firstLat) * Math.cos(nextLat) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2)
 
-    const chord = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    const chord = 2 * Math.atan2(Math.sqrt(angle), Math.sqrt(1 - angle))
 
     return earthRadius * chord
 }
