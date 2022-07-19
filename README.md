@@ -2,7 +2,9 @@
 
 ## _Foxglove Studio Extension_
 
-This extension extends the capabilities of the default Map panel.
+The extension solves the problem of visualizing the trajectory of the vehicle with additional features, such as switching layers, interaction with the timeline and speed display.
+
+This project was implemented as the author's graduate work.
 
 ## Installation
 
